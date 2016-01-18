@@ -29,6 +29,8 @@ defmodule Sqlitex.Mixfile do
       {:earmark, ">= 0.0.0", only: :dev},
       {:ex_doc, "~> 0.7", only: :dev},
       {:inch_ex, "~> 0.2", only: :dev},
+
+      {:ex_unit_fixtures, github: "obmarg/ex_unit_fixtures", only: :test}
     ]
   end
 

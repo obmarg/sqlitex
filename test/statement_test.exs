@@ -1,10 +1,11 @@
 defmodule StatementTest do
+  use ExUnitFixtures
+  use ExUnitFixtures.AutoImport
   use ExUnit.Case, async: true
   doctest Sqlitex.Statement
 
-  test "fetch_all! works" do
-    {:ok, db} = Sqlitex.open(":memory:")
-
+  @tag fixtures: [:db]
+  test "fetch_all! works", %{db: db} do
     result = Sqlitex.Statement.prepare!(db, "PRAGMA user_version;")
              |> Sqlitex.Statement.fetch_all!
 

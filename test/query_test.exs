@@ -2,6 +2,9 @@ defmodule SqlitexTest do
   use ExUnitFixtures
   use ExUnit.Case
 
+  # Most of our tests require a db, so make that the default fixture.
+  @moduletag fixtures: [:db]
+
   @tag fixtures: [:golf_db]
   test "a basic query returns a list of keyword lists", context do
     [row] = context[:golf_db] |> Sqlitex.query("SELECT * FROM players ORDER BY id LIMIT 1")
@@ -47,7 +50,6 @@ defmodule SqlitexTest do
     assert row == %{id: 25, name: "Slothstronauts"}
   end
 
-  @tag fixtures: [:db]
   test "exec", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (a INTEGER, b INTEGER, c INTEGER)")
     :ok = Sqlitex.exec(db, "INSERT INTO t VALUES (1, 2, 3)")
@@ -56,13 +58,11 @@ defmodule SqlitexTest do
     Sqlitex.close(db)
   end
 
-  @tag fixtures: [:db]
   test "it handles queries with no columns", %{db: db} do
     assert [] == Sqlitex.query(db, "CREATE TABLE t (a INTEGER, b INTEGER, c INTEGER)")
     Sqlitex.close(db)
   end
 
-  @tag fixtures: [:db]
   test "it handles different cases of column types", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (inserted_at DATETIME, updated_at DateTime)")
     :ok = Sqlitex.exec(db, "INSERT INTO t VALUES ('2012-10-14 05:46:28.312941', '2012-10-14 05:46:35.758815')")
@@ -71,7 +71,6 @@ defmodule SqlitexTest do
     assert row[:updated_at] == {{2012, 10, 14}, {5, 46, 35, 758815}}
   end
 
-  @tag fixtures: [:db]
   test "it inserts nil", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (a INTEGER)")
     [] = Sqlitex.query(db, "INSERT INTO t VALUES (?1)", bind: [nil])
@@ -79,7 +78,6 @@ defmodule SqlitexTest do
     assert row[:a] == nil
   end
 
-  @tag fixtures: [:db]
   test "it inserts boolean values", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (id INTEGER, a BOOLEAN)")
     [] = Sqlitex.query(db, "INSERT INTO t VALUES (?1, ?2)", bind: [1, true])
@@ -89,7 +87,6 @@ defmodule SqlitexTest do
     assert row2[:a] == false
   end
 
-  @tag fixtures: [:db]
   test "it inserts Erlang date types", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (d DATE)")
     [] = Sqlitex.query(db, "INSERT INTO t VALUES (?)", bind: [{1985, 10, 26}])
@@ -97,7 +94,6 @@ defmodule SqlitexTest do
     assert row[:d] == {1985, 10, 26}
   end
 
-  @tag fixtures: [:db]
   test "it inserts Elixir time types", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (t TIME)")
     [] = Sqlitex.query(db, "INSERT INTO t VALUES (?)", bind: [{1, 20, 0, 666}])
@@ -105,7 +101,6 @@ defmodule SqlitexTest do
     assert row[:t] == {1, 20, 0, 666}
   end
 
-  @tag fixtures: [:db]
   test "it inserts Erlang datetime tuples", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (dt DATETIME)")
     [] = Sqlitex.query(db, "INSERT INTO t VALUES (?)", bind: [{{1985, 10, 26}, {1, 20, 0, 666}}])
@@ -113,7 +108,6 @@ defmodule SqlitexTest do
     assert row[:dt] == {{1985, 10, 26}, {1, 20, 0, 666}}
   end
 
-  @tag fixtures: [:db]
   test "query! returns data", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (num INTEGER)")
     [] = Sqlitex.query(db, "INSERT INTO t VALUES (?)", bind: [1])
@@ -121,7 +115,6 @@ defmodule SqlitexTest do
     assert results == [[num: 1]]
   end
 
-  @tag fixtures: [:db]
   test "query! throws on error", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (num INTEGER)")
     [] = Sqlitex.query(db, "INSERT INTO t VALUES (?)", bind: [1])
@@ -130,7 +123,6 @@ defmodule SqlitexTest do
     end
   end
 
-  @tag fixtures: [:db]
   test "decimal types", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (f DECIMAL)")
     d = Decimal.new(1.123)
@@ -139,7 +131,6 @@ defmodule SqlitexTest do
     assert row[:f] == d
   end
 
-  @tag fixtures: [:db]
   test "decimal types with scale and precision", %{db: db} do
     :ok = Sqlitex.exec(db, "CREATE TABLE t (id INTEGER, f DECIMAL(3,2))")
     [] = Sqlitex.query(db, "INSERT INTO t VALUES (?,?)", bind: [1, Decimal.new(1.123)])

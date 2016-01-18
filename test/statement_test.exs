@@ -1,6 +1,5 @@
 defmodule StatementTest do
   use ExUnitFixtures
-  use ExUnitFixtures.AutoImport
   use ExUnit.Case, async: true
   doctest Sqlitex.Statement
 

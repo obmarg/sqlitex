@@ -17,7 +17,7 @@ defmodule SqlitexTest do
     assert row == %{id: 1, name: "Mikey", created_at: {{2012,10,14},{05,46,28,318107}}, updated_at: {{2013,09,06},{22,29,36,610911}}, type: nil}
   end
 
-  @tag fixtures: [:golf_db_url]
+  @tag fixtures: [:golf_db_url, :golf_db]
   test "with_db", context do
     [row] = Sqlitex.with_db(context.golf_db_url, fn(db) ->
       Sqlitex.query(db, "SELECT * FROM players ORDER BY id LIMIT 1")

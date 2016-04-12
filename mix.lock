@@ -4,7 +4,7 @@
   "earmark": {:hex, :earmark, "0.1.17"},
   "esqlite": {:hex, :esqlite, "0.2.1"},
   "ex_doc": {:hex, :ex_doc, "0.10.0"},
-  "ex_unit_fixtures": {:git, "https://github.com/obmarg/ex_unit_fixtures.git", "d78931774ec61acf2b1e0834b253293a75b04a68", []},
+  "ex_unit_fixtures": {:git, "https://github.com/obmarg/ex_unit_fixtures.git", "bfd4d7d8c6a178b51fdd05558d338babc1f492ed", []},
   "inch_ex": {:hex, :inch_ex, "0.4.0"},
   "pipe": {:hex, :pipe, "0.0.2"},
   "poison": {:hex, :poison, "1.5.0"}}
